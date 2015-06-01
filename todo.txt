@@ -1,0 +1,6 @@
+Make the button look good.
+Make the div for adding content to.
+Add content to div.
+Figure out children comments.
+Figure out pagination.
+Figure out injection problem (firing too many times).
