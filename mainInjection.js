@@ -1,20 +1,28 @@
 //For testing if it loaded
 alert('Hello World!');
-//List of links to comment pages
-var commentLinks;
 
 //Main method
 function main(){
-	fillCommentLinks();
-	for (i=0;i<commentLinks.length;i++){
-		commentLinks[i].innerHTML = "Test";
-	}
+	insertButton();
 }
 
-//Gets all the links to coment pages and arranges in array
-function fillCommentLinks(){
-	commentLinks = document.getElementsByClassName('comments');
+//Inserts the expando button into the reddit page
+function insertButton(){
+	var button = document.createElement("a");
+	$(button).addClass("commentExpander");
+	button.innerText = "Expand";
+	$(button).on("click",function(){
+		console.log($(this).siblings(".flat-list").find(".comments").attr("href")+".json");
+	});
+	$('.tagline').before(button);
 }
+
+
+//Gets the comments for a given thread
+function loadComments(theURL){
+
+}
+
 
 //Get everything going
 main();
