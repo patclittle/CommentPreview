@@ -24,6 +24,7 @@ function insertExpandoButton(){
 function insertCommentDiv(theButton){
 	var theURL; //the JSON url for the thread
 	var commentDiv; //the div to display comments with
+	var commentHTML;
 	//Initialize the JSON URL
 	theURL = $(theButton).siblings(".flat-list").find(".comments").attr("href")+".json";
 	//Build the container div
@@ -33,7 +34,8 @@ function insertCommentDiv(theButton){
 	$.getJSON(theURL,function foo(result) {
 		$.each(result[1].data.children.slice(0, 100),
 		    function (i, post) {
-		        $(commentDiv).append("<p>"+post.data.body+"</p>");
+		    	commentHTML=$('<div/>').html(post.data.body_html).text();
+		        $(commentDiv).append(commentHTML+'<hr/>');
 		    }
 	    )
 	})
