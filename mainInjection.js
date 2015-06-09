@@ -7,12 +7,25 @@ function main(){
 function insertExpandoButton(){
 	//Build the HTML element
 	var button = document.createElement("a");
-	$(button).addClass("commentExpander");
+	//Add class for keeping track of expanding
+	$(button).addClass("commentExpander unexpanded");
 	button.innerText = "Expand";
+	//Add expanding functionality to button
 	$(button).on("click",function(){
-		insertCommentDiv($(this));
+		if (this.className.includes("unexpanded")){ // expand the comments
+			if (this.className.includes("opened")){ // if already opened
+				$(this).siblings(".commentContent").show(); //just show the div
+				this.className = "commentExpander opened";
+			}else{ // if not already opened
+				insertCommentDiv($(this)); // open and show comments
+				this.className = "commentExpander opened";
+			}
+		}else{ // unexpand comments
+			$(this).siblings(".commentContent").hide();
+			this.className = "commentExpander opened unexpanded";
+		}
 	});
-	//Insert it into the page
+	//Insert expando button into the page
 	$('.tagline').before(button);
 }
 
