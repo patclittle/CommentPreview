@@ -5,6 +5,7 @@ function main(){
 
 //Inserts the expando button into the reddit page
 function insertExpandoButton(){
+	console.log("hello");
 	//Build the HTML element
 	var button = document.createElement("a");
 	//Add class for keeping track of expanding
@@ -37,12 +38,14 @@ function insertExpandoButton(){
 function insertCommentDiv(theButton){
 	var theURL; //the JSON url for the thread
 	var commentDiv; //the div to display comments with
-	var commentHTML;
+	var commentHTML; //HTML for the comments to add
 	//Initialize the JSON URL
 	theURL = $(theButton).siblings(".flat-list").find(".comments").attr("href")+".json";
 	//Build the container div
 	commentDiv = document.createElement("div");
 	$(commentDiv).addClass("commentContent");
+	//Add the div to the page
+	$(theButton).siblings(".flat-list").after(commentDiv);
 	//Get comments and write to div
 	$.getJSON(theURL,function foo(result) {
 		$.each(result[1].data.children.slice(0, 100),
@@ -52,8 +55,6 @@ function insertCommentDiv(theButton){
 		    }
 	    )
 	})
-	//Add the div to the page
-	&(theButton).siblings(".flat-list").after(commentDiv);
 
 
 }
