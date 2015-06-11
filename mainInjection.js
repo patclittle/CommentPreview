@@ -39,6 +39,7 @@ function insertCommentDiv(theButton){
 	var theURL; //the JSON url for the thread
 	var commentDiv; //the div to display comments with
 	var commentHTML; //HTML for the comments to add
+	var moreComments; //HTML object for the "load more comments" button
 	//Initialize the JSON URL
 	theURL = $(theButton).siblings(".flat-list").find(".comments").attr("href")+".json";
 	//Build the container div
@@ -51,6 +52,12 @@ function insertCommentDiv(theButton){
 		$.each(result[1].data.children.slice(0, 100),
 		    function (i, post) {
 		    	commentHTML=$('<div/>').html(post.data.body_html).text();
+		    	if(post.data.replies != ""){
+		    		moreComments=document.createElement('a');
+		    		moreComments.href = "www.google.com";
+		    		moreComments.innerText = "Load more comments...";
+		    		commentHTML+="<span>"+moreComments.outerHTML+"</span>";
+		    	}
 		        $(commentDiv).append(commentHTML+'<hr/>');
 		    }
 	    )
