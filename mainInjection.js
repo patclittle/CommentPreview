@@ -55,17 +55,18 @@ function insertCommentDiv(theButton){
 		$.each(result[1].data.children.slice(0, 100),
 		    function (i, post) {
 		    	commentHTML=$('<div/>').html(post.data.body_html).text(); //comment content
-		    	commentHTML=$.parseHTML(commentHTML);
+		    	commentHTML=$.parseHTML(commentHTML); //Make the comment into an HTML object
 		    	if(post.data.replies != ""){ // If there are replies to this comment
 		    		moreComments=document.createElement('a'); //link to load replies
 		    		moreComments.innerText = "Load more comments...";
-		    		$(commentHTML).append("<span>"+moreComments.outerHTML+"</span>"); //Add link to comment
 		    		$(moreComments).on("click",function(){ //Make the link load replies
-		    			$(commentHTML.firstChild).append("<div style=\"margin-left:10px;\">"+post.data.replies.data.children[0].data.body+"</div>");
+		    			console.log(post.data.replies.data.children[0].data.body);
+		    			$(this).parent().before("<div style=\"margin-left:10px;\">"+post.data.replies.data.children[0].data.body+"</div>");
 		    		});
+		    		$(commentHTML).append($('<span/>').html($(moreComments)));
 		    		
 		    	}
-		    	$(commentHTML).append("<hr/>");
+		    	$(commentHTML).append("<hr/>"); // Separate comments
 		        $(commentDiv).append($(commentHTML)); //Add comment content to page
 		    }
 	    )
