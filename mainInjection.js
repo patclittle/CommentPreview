@@ -15,13 +15,16 @@ function insertExpandoButton(){
 		if (this.className.includes("unexpanded")){ // expand the comments
 			if (this.className.includes("opened")){ // if already opened
 				$(this).siblings(".commentContent").show(); //just show the div
-				this.className = "commentExpander opened";
 			}else{ // if not already opened
 				insertCommentDiv($(this)); // open and show comments
-				this.className = "commentExpander opened";
 			}
+			//Change around the button to be a collapse
+			this.innerText = "Collapse";
+			this.className = "commentExpander opened";
 		}else{ // unexpand comments
 			$(this).siblings(".commentContent").hide();
+			//Change button to be an expand
+			this.innerText = "Expand";
 			this.className = "commentExpander opened unexpanded";
 		}
 	});
@@ -37,25 +40,49 @@ function insertExpandoButton(){
 function insertCommentDiv(theButton){
 	var theURL; //the JSON url for the thread
 	var commentDiv; //the div to display comments with
-	var commentHTML;
+	var commentHTML; //HTML for the comments to add
 	//Initialize the JSON URL
 	theURL = $(theButton).siblings(".flat-list").find(".comments").attr("href")+".json";
 	//Build the container div
 	commentDiv = document.createElement("div");
 	$(commentDiv).addClass("commentContent");
+	//Add the div to the page
+	$(theButton).siblings(".flat-list").after(commentDiv);
 	//Get comments and write to div
 	$.getJSON(theURL,function foo(result) {
+		//Loop running through all top replies
 		$.each(result[1].data.children.slice(0, 100),
 		    function (i, post) {
-		    	commentHTML=$('<div/>').html(post.data.body_html).text();
-		        $(commentDiv).append(commentHTML+'<hr/>');
+		    	commentHTML=$('<div/>').html(post.data.body_html).text(); //comment content
+		    	commentHTML=$.parseHTML(commentHTML); //Make the comment into an HTML object
+		    	if(post.data.replies != ""){ // If there are replies to this comment
+		    		insertReplies(post,commentHTML);	
+		    	}
+		    	$(commentHTML).append("<hr/>"); // Separate comments
+		        $(commentDiv).append($(commentHTML)); //Add comment content to page
 		    }
 	    )
 	})
-	//Add the div to the page
-	&(theButton).siblings(".flat-list").after(commentDiv);
+}
 
 
+/*Inserts the replies into the thread
+ * @param post is the comment to load replies for
+ * @param context is the html object for the comment to load replies for
+ */
+function insertReplies(post,context){
+	var moreComments; //HTML object for the "load more comments" button
+	var replyHTML;
+
+	moreComments=document.createElement('a'); //link to load replies
+	moreComments.innerText = "Load more comments...";
+	replyHTML=$('<div/>').html(post.data.replies.data.children[0].data.body_html).text();
+	replyHTML=$.parseHTML(replyHTML);
+	console.log(replyHTML);
+	$(moreComments).on("click",function(){ //Make the link load replies
+		$(this).parent().before($(replyHTML));
+	});
+	$(context).append($('<span/>').html($(moreComments)));
 }
 
 //Get everything going

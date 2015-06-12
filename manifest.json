@@ -6,6 +6,7 @@
 	"permissions": [
 		"tabs",
 		"http://www.reddit.com/",
+		"https://www.reddit.com/",
 		"https://api.reddit.com/"
 	],
 	"background":{
