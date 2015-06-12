@@ -65,6 +65,11 @@ function insertCommentDiv(theButton){
 	})
 }
 
+
+/*Inserts the replies into the thread
+ * @param post is the comment to load replies for
+ * @param context is the html object for the comment to load replies for
+ */
 function insertReplies(post,context){
 	var moreComments; //HTML object for the "load more comments" button
 
