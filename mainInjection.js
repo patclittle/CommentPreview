@@ -73,15 +73,20 @@ function insertCommentDiv(theButton){
 function insertReplies(post,context){
 	var moreComments; //HTML object for the "load more comments" button
 	var replyHTML; //HTML for the first reply
+	var theReply; //the reply to load
 
 	moreComments=document.createElement('a'); //link to load replies
 	moreComments.innerText = "Load more comments...";
 	moreComments.className = "0";
 	$(moreComments).on("click",function(){ //Make the link load replies
-		replyHTML=$('<div/>').html(post.data.children[this.className].data.body_html).text()+"<hr/>"; 
+		theReply = post.data.children[this.className].data;
+		replyHTML=$('<div/>').html(theReply.body_html+"<hr/>").text(); 
 		replyHTML=$.parseHTML(replyHTML); //Build the HTML from the JSON
 		$(replyHTML).css("margin-left","10px"); // indent comment
 		$(this).parent().before($(replyHTML)); //insert comment
+		if (theReply.replies != ""){
+			insertReplies(theReply.replies,replyHTML);
+		}
 		this.className = (+this.className)+1; // get ready to load next reply
 	});
 	$(context).append($('<span/>').html($(moreComments)));
