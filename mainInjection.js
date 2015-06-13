@@ -74,11 +74,13 @@ function insertReplies(post,context){
 	var moreComments; //HTML object for the "load more comments" button
 	var replyHTML; //HTML for the first reply
 	var theReply; //the reply to load
+	var replyNum; //the number of reply in the thread
 
 	moreComments=document.createElement('a'); //link to load replies
 	moreComments.innerText = "Load more comments...";
 	moreComments.className = "0";
 	$(moreComments).on("click",function(){ //Make the link load replies
+		console.log(post);
 		theReply = post.data.children[this.className].data;
 		replyHTML=$('<div/>').html(theReply.body_html+"<hr/>").text(); 
 		replyHTML=$.parseHTML(replyHTML); //Build the HTML from the JSON
@@ -87,7 +89,12 @@ function insertReplies(post,context){
 		if (theReply.replies != ""){
 			insertReplies(theReply.replies,replyHTML);
 		}
-		this.className = (+this.className)+1; // get ready to load next reply
+		replyNum = +this.className;
+		if(replyNum<post.data.children.length-1){
+			this.className = replyNum+1; // get ready to load next reply
+		}else{
+			$(this).hide();
+		}
 	});
 	$(context).append($('<span/>').html($(moreComments)));
 }
