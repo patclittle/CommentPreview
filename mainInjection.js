@@ -90,9 +90,9 @@ function insertReplies(post,context){
 			insertReplies(theReply.replies,replyHTML); // load those replies
 		}
 		//keep track of which number reply we are at with class name
-		replyNum = +this.className;
+		replyNum = (+this.className)+1;
 		if(replyNum<post.data.children.length-1){ //if there are more replies to load
-			this.className = replyNum+1; // get ready to load next reply
+			this.className = replyNum; // get ready to load next reply
 		}else{
 			$(this).hide(); // otherwise hide the button
 		}
