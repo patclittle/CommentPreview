@@ -56,7 +56,7 @@ function insertCommentDiv(theButton){
 		    	commentHTML=$('<div/>').html(post.data.body_html).text(); //comment content
 		    	commentHTML=$.parseHTML(commentHTML); //Make the comment into an HTML object
 		    	if(post.data.replies != ""){ // If there are replies to this comment
-		    		insertReplies(post,commentHTML);	
+		    		insertReplies(post.data.replies,commentHTML);	
 		    	}
 		    	$(commentHTML).append("<hr/>"); // Separate comments
 		        $(commentDiv).append($(commentHTML)); //Add comment content to page
@@ -72,16 +72,17 @@ function insertCommentDiv(theButton){
  */
 function insertReplies(post,context){
 	var moreComments; //HTML object for the "load more comments" button
-	var replyHTML;
+	var replyHTML; //HTML for the first reply
 
 	moreComments=document.createElement('a'); //link to load replies
 	moreComments.innerText = "Load more comments...";
-	replyHTML=$('<div/>').html(post.data.replies.data.children[0].data.body_html).text();
-	replyHTML=$.parseHTML(replyHTML);
-	$(replyHTML).css("margin-left","10px");
-	console.log($(replyHTML));
+	moreComments.className = "0";
 	$(moreComments).on("click",function(){ //Make the link load replies
-		$(this).parent().before($(replyHTML));
+		replyHTML=$('<div/>').html(post.data.children[this.className].data.body_html).text()+"<hr/>"; 
+		replyHTML=$.parseHTML(replyHTML); //Build the HTML from the JSON
+		$(replyHTML).css("margin-left","10px"); // indent comment
+		$(this).parent().before($(replyHTML)); //insert comment
+		this.className = (+this.className)+1; // get ready to load next reply
 	});
 	$(context).append($('<span/>').html($(moreComments)));
 }
