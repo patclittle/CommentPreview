@@ -55,10 +55,11 @@ function insertCommentDiv(theButton){
 		    function (i, post) {
 		    	commentHTML=$('<div/>').html(post.data.body_html).text(); //comment content
 		    	commentHTML=$.parseHTML(commentHTML); //Make the comment into an HTML object
+		    	$(commentHTML).removeClass("md");
+		    	$(commentHTML).addClass("commentP");
 		    	if(post.data.replies != ""){ // If there are replies to this comment
 		    		insertReplies(post.data.replies,commentHTML);	
 		    	}
-		    	$(commentHTML).append("<hr/>"); // Separate comments
 		        $(commentDiv).append($(commentHTML)); //Add comment content to page
 		    }
 	    )
@@ -82,9 +83,10 @@ function insertReplies(post,context){
 	$(moreComments).on("click",function(){ //Make the link load replies
 		console.log(post);
 		theReply = post.data.children[this.className].data;
-		replyHTML=$('<div/>').html(theReply.body_html+"<hr/>").text(); 
+		replyHTML=$('<div/>').html(theReply.body_html).text(); 
 		replyHTML=$.parseHTML(replyHTML); //Build the HTML from the JSON
-		$(replyHTML).css("margin-left","10px"); // indent comment
+		$(replyHTML).removeClass("md");
+		$(replyHTML).addClass("commentP");
 		$(this).parent().before($(replyHTML)); //insert comment
 		if (theReply.replies != ""){ // If there are replies to this reply
 			insertReplies(theReply.replies,replyHTML); // load those replies
