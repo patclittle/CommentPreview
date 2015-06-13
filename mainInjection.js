@@ -86,14 +86,15 @@ function insertReplies(post,context){
 		replyHTML=$.parseHTML(replyHTML); //Build the HTML from the JSON
 		$(replyHTML).css("margin-left","10px"); // indent comment
 		$(this).parent().before($(replyHTML)); //insert comment
-		if (theReply.replies != ""){
-			insertReplies(theReply.replies,replyHTML);
+		if (theReply.replies != ""){ // If there are replies to this reply
+			insertReplies(theReply.replies,replyHTML); // load those replies
 		}
+		//keep track of which number reply we are at with class name
 		replyNum = +this.className;
-		if(replyNum<post.data.children.length-1){
+		if(replyNum<post.data.children.length-1){ //if there are more replies to load
 			this.className = replyNum+1; // get ready to load next reply
 		}else{
-			$(this).hide();
+			$(this).hide(); // otherwise hide the button
 		}
 	});
 	$(context).append($('<span/>').html($(moreComments)));
