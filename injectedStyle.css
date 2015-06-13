@@ -1,8 +1,10 @@
 .commentP{
-	font-size: 10px;
 	padding:5px;
-	background-color: #CBCBCB;
+	background-color: #E5E5E5;
 	border: 1px solid #7A7A7A;
 	border-radius: 5px;
-	color: black;
+	font-size: 10px !important;
+}
+.commentP p{
+	color: rgb(100,100,100);
 }
