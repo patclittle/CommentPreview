@@ -78,7 +78,8 @@ function insertReplies(post,context){
 	moreComments.innerText = "Load more comments...";
 	replyHTML=$('<div/>').html(post.data.replies.data.children[0].data.body_html).text();
 	replyHTML=$.parseHTML(replyHTML);
-	console.log(replyHTML);
+	$(replyHTML).css("margin-left","10px");
+	console.log($(replyHTML));
 	$(moreComments).on("click",function(){ //Make the link load replies
 		$(this).parent().before($(replyHTML));
 	});
