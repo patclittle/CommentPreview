@@ -6,10 +6,10 @@ function main(){
 //Inserts the expando button into the reddit page
 function insertExpandoButton(){
 	//Build the HTML element
-	var button = document.createElement("a");
+	var button = document.createElement("img");
 	//Add class for keeping track of expanding
 	$(button).addClass("commentExpander unexpanded");
-	button.innerText = "Expand";
+	button.src = chrome.extension.getURL('plusIcon.png');
 	//Add expanding functionality to button
 	$(button).on("click",function(){
 		if (this.className.includes("unexpanded")){ // expand the comments
@@ -19,12 +19,12 @@ function insertExpandoButton(){
 				insertCommentDiv($(this)); // open and show comments
 			}
 			//Change around the button to be a collapse
-			this.innerText = "Collapse";
+			this.src = chrome.extension.getURL('minusIcon.png');
 			this.className = "commentExpander opened";
 		}else{ // unexpand comments
 			$(this).siblings(".commentContent").hide();
 			//Change button to be an expand
-			this.innerText = "Expand";
+			this.src = chrome.extension.getURL('plusIcon.png');
 			this.className = "commentExpander opened unexpanded";
 		}
 	});
@@ -55,6 +55,7 @@ function insertCommentDiv(theButton){
 		    function (i, post) {
 		    	commentHTML=$('<div/>').html(post.data.body_html).text(); //comment content
 		    	commentHTML=$.parseHTML(commentHTML); //Make the comment into an HTML object
+		    	$(commentHTML).prepend("<a href=\"www.reddit.com/user/"+post.data.author+"\">"+post.data.author+"</a> "+post.data.score+" points");
 		    	$(commentHTML).addClass("commentP");
 		    	if(post.data.replies != ""){ // If there are replies to this comment
 		    		insertReplies(post.data.replies,commentHTML);	
@@ -84,10 +85,13 @@ function insertReplies(post,context){
 		theReply = post.data.children[this.className].data;
 		replyHTML=$('<div/>').html(theReply.body_html).text(); 
 		replyHTML=$.parseHTML(replyHTML); //Build the HTML from the JSON
+		$(replyHTML).prepend("<a href=\"www.reddit.com/user/"+theReply.author+"\">"+theReply.author+"</a> "+theReply.score+" points")
 		$(replyHTML).addClass("commentP");
 		$(this).parent().before($(replyHTML)); //insert comment
 		if (theReply.replies != ""){ // If there are replies to this reply
-			insertReplies(theReply.replies,replyHTML); // load those replies
+			if(theReply.replies.data.children[0].kind != "more"){
+				insertReplies(theReply.replies,replyHTML); // load those replies
+			}
 		}
 		//keep track of which number reply we are at with class name
 		replyNum = (+this.className)+1;

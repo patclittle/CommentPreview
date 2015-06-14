@@ -1,10 +1,13 @@
 .commentP{
 	padding:5px;
-	background-color: #E5E5E5;
 	border: 1px solid #7A7A7A;
 	border-radius: 5px;
 	font-size: 10px !important;
+	color: black !important;
 }
-.commentP p{
-	color: rgb(100,100,100);
+.commentP:nth-child(even){
+	background-color: rgb(230,230,230);
+}
+.commentP:nth-child(odd){
+	background-color: rgb(200,200,200);
 }
