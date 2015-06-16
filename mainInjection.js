@@ -46,13 +46,10 @@ function insertCommentDiv(theButton){
 	//Build the container div
 	commentDiv = document.createElement("div");
 	$(commentDiv).addClass("commentContent");
-
-
 	$(commentDiv).append("<span/>");
-
-
 	//Add the div to the page
 	$(theButton).siblings(".flat-list").after(commentDiv);
+	$(commentDiv).append("<p style=\"color:red;font-size:16px;\">loading comments...</p>");
 	//Get comments and write to div
 	$.getJSON(theURL,function foo(result) {
 		//Loop running through all top replies
