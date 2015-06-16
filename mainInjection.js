@@ -85,7 +85,7 @@ function insertReplies(post,context){
 		theReply = post.data.children[this.className].data;
 		replyHTML=$('<div/>').html(theReply.body_html).text(); 
 		replyHTML=$.parseHTML(replyHTML); //Build the HTML from the JSON
-		$(replyHTML).prepend("<a href=\"/user/"+theReply.author+"\">"+theReply.author+"</a> "+theReply.score+" points")
+		$(replyHTML).prepend("<a href=\"/user/"+theReply.author+"\">"+theReply.author+"</a> "+theReply.score+" points");
 		$(replyHTML).addClass("commentP");
 		$(this).parent().before($(replyHTML)); //insert comment
 		if (theReply.replies != ""){ // If there are replies to this reply
@@ -104,8 +104,24 @@ function insertReplies(post,context){
 	$(context).append($('<span/>').html($(moreComments)));
 }
 
-function insertComment(post,context){
-	
+function insertComment(data,context){
+	var commentHTML; //DOM object for comment
+	var repliesLink; //Dom object for replies link
+
+	//Set up comment
+	commentHTML=$('<div/>').html(data.body_html).text();
+	commentHTML=$.parseHTML(commentHTML);
+	$(commentHTML).prepend("<a href=\"/user/"+data.author+"\">"+data.author+"</a> "+data.score+" points");
+	$(commentHTML).addClass("commentP");
+
+	//Add "load replies" button if necessary
+	if(data.replies!=""){
+		if(data.replies.data.children[0].kind!="more"){
+			repliesLink=document.createElement('a');
+			repliesLink.innerText="Load more comments...";
+			repliesLink.className="0";
+		}
+	}
 }
 
 //Get everything going
