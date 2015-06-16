@@ -55,7 +55,7 @@ function insertCommentDiv(theButton){
 		    function (i, post) {
 		    	commentHTML=$('<div/>').html(post.data.body_html).text(); //comment content
 		    	commentHTML=$.parseHTML(commentHTML); //Make the comment into an HTML object
-		    	$(commentHTML).prepend("<a href=\"www.reddit.com/user/"+post.data.author+"\">"+post.data.author+"</a> "+post.data.score+" points");
+		    	$(commentHTML).prepend("<a href=\"/user/"+post.data.author+"\">"+post.data.author+"</a> "+post.data.score+" points");
 		    	$(commentHTML).addClass("commentP");
 		    	if(post.data.replies != ""){ // If there are replies to this comment
 		    		insertReplies(post.data.replies,commentHTML);	
@@ -85,7 +85,7 @@ function insertReplies(post,context){
 		theReply = post.data.children[this.className].data;
 		replyHTML=$('<div/>').html(theReply.body_html).text(); 
 		replyHTML=$.parseHTML(replyHTML); //Build the HTML from the JSON
-		$(replyHTML).prepend("<a href=\"www.reddit.com/user/"+theReply.author+"\">"+theReply.author+"</a> "+theReply.score+" points")
+		$(replyHTML).prepend("<a href=\"/user/"+theReply.author+"\">"+theReply.author+"</a> "+theReply.score+" points")
 		$(replyHTML).addClass("commentP");
 		$(this).parent().before($(replyHTML)); //insert comment
 		if (theReply.replies != ""){ // If there are replies to this reply
@@ -102,6 +102,10 @@ function insertReplies(post,context){
 		}
 	});
 	$(context).append($('<span/>').html($(moreComments)));
+}
+
+function insertComment(post,context){
+	
 }
 
 //Get everything going
