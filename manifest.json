@@ -9,6 +9,10 @@
 		"https://www.reddit.com/",
 		"https://api.reddit.com/"
 	],
+	"web_accessible_resources": [
+		"/plusIcon.png",
+		"/minusIcon.png"
+	],
 	"background":{
 		"scripts": ["background.js"],
 		"persistent": false
