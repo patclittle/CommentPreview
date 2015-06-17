@@ -41,6 +41,7 @@ function insertCommentDiv(theButton){
 	var theURL; //the JSON url for the thread
 	var commentDiv; //the div to display comments with
 	var commentHTML; //HTML for the comments to add
+	var loadingText;//HTML for loading text
 	//Initialize the JSON URL
 	theURL = $(theButton).siblings(".flat-list").find(".comments").attr("href")+".json";
 	//Build the container div
@@ -48,10 +49,15 @@ function insertCommentDiv(theButton){
 	$(commentDiv).addClass("commentContent");
 	$(commentDiv).append("<span/>");
 	//Add the div to the page
+	loadingText=document.createElement("p");
+	loadingText.style.color="red";
+	loadingText.style.fontSize="16px";
+	loadingText.innerText="Loading comments...";
 	$(theButton).siblings(".flat-list").after(commentDiv);
-	$(commentDiv).append("<p style=\"color:red;font-size:16px;\">loading comments...</p>");
+	$(commentDiv).append(loadingText);
 	//Get comments and write to div
 	$.getJSON(theURL,function foo(result) {
+		loadingText.style.display="none";
 		//Loop running through all top replies
 		$.each(result[1].data.children.slice(0, 100),
 		    function (i, post) {
