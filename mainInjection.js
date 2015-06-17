@@ -42,26 +42,32 @@ function insertCommentDiv(theButton){
 	var commentDiv; //the div to display comments with
 	var commentHTML; //HTML for the comments to add
 	var loadingText;//HTML for loading text
+	var colorCode; //code for the bg color of the comment
 	//Initialize the JSON URL
 	theURL = $(theButton).siblings(".flat-list").find(".comments").attr("href")+".json";
 	//Build the container div
 	commentDiv = document.createElement("div");
 	$(commentDiv).addClass("commentContent");
 	$(commentDiv).append("<span/>");
-	//Add the div to the page
+	//Add loading text to div while comments load
 	loadingText=document.createElement("p");
 	loadingText.style.color="red";
 	loadingText.style.fontSize="16px";
 	loadingText.innerText="Loading comments...";
+	//Add the div to the page
 	$(theButton).siblings(".flat-list").after(commentDiv);
 	$(commentDiv).append(loadingText);
+	//Set color code as 0 to start (arbitrary)
+	colorCode=1;
 	//Get comments and write to div
 	$.getJSON(theURL,function foo(result) {
 		loadingText.style.display="none";
 		//Loop running through all top replies
 		$.each(result[1].data.children.slice(0, 100),
 		    function (i, post) {
-		        insertComment(post.data,commentDiv.lastChild);
+		    	//insert comment
+		        insertComment(post.data,commentDiv.lastChild,colorCode);
+		        colorCode=colorCode^1;//for alternating BG colors
 		    }
 	    )
 	})
@@ -72,8 +78,10 @@ function insertCommentDiv(theButton){
  * @param data is the data of the comment from the JSON
  * @param context is the context of where to insert the comment
  *     (comment will go directly before the context)
+ * @colorCode is the code for the bg color
+ *     (1 for EFF7FF, 0 for FFFFFF)
  */
-function insertComment(data,context){
+function insertComment(data,context,colorCode){
 	var commentHTML; //DOM object for comment
 	var repliesLink; //Dom object for replies link
 	var replyNum; //for keeping track of how many replies have been loaded
@@ -82,7 +90,11 @@ function insertComment(data,context){
 	commentHTML=$('<div/>').html(data.body_html).text();
 	commentHTML=$.parseHTML(commentHTML);
 	$(commentHTML).prepend("<a href=\"/user/"+data.author+"\">"+data.author+"</a> "+data.score+" points");
-	$(commentHTML).addClass("commentP");
+	if (colorCode==1){
+		$(commentHTML).addClass("commentA");
+	}else{
+		$(commentHTML).addClass("commentB");
+	}
 
 	//Add "load replies" button if necessary
 	if(data.replies!=""){ //Check if there are replies
@@ -94,7 +106,7 @@ function insertComment(data,context){
 
 			//Add functionality to button
 			$(repliesLink).on("click",function(){
-				insertComment(data.replies.data.children[this.className].data,repliesLink);
+				insertComment(data.replies.data.children[this.className].data,repliesLink,colorCode^1);
 				//keep track of which number reply we are at with class name
 				replyNum = (+this.className)+1;
 				if(replyNum<data.replies.data.children.length){ //if there are more replies to load
