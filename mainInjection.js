@@ -109,7 +109,7 @@ function insertComment(data,context,colorCode){
 				insertComment(data.replies.data.children[this.className].data,repliesLink,colorCode^1);
 				//keep track of which number reply we are at with class name
 				replyNum = (+this.className)+1;
-				if(replyNum<data.replies.data.children.length){ //if there are more replies to load
+				if(replyNum<data.replies.data.children.length && data.replies.data.children[replyNum].kind!="more"){ //if there are more replies to load
 					this.className = replyNum; // get ready to load next reply
 				}else{
 					$(this).hide(); // otherwise hide the button
