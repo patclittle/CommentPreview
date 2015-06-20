@@ -11,7 +11,9 @@
 	],
 	"web_accessible_resources": [
 		"/plusIcon.png",
-		"/minusIcon.png"
+		"/minusIcon.png",
+		"/plusIconLight.png",
+		"/minusIconLight.png"
 	],
 	"background":{
 		"scripts": ["background.js"],
