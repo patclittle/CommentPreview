@@ -48,9 +48,8 @@ function insertCommentDiv(theButton){
 	//Build the container div
 	commentDiv = document.createElement("div");
 	$(commentDiv).addClass("commentContent");
-	$(commentDiv).append("<span/>");
 	//Add loading text to div while comments load
-	loadingText=document.createElement("p");
+	loadingText=document.createElement("a");
 	loadingText.style.color="red";
 	loadingText.style.fontSize="16px";
 	loadingText.innerText="Loading comments...";
@@ -61,15 +60,16 @@ function insertCommentDiv(theButton){
 	colorCode=1;
 	//Get comments and write to div
 	$.getJSON(theURL,function foo(result) {
-		loadingText.style.display="none";
-		//Loop running through all top replies
-		$.each(result[1].data.children.slice(0, 100),
-		    function (i, post) {
-		    	//insert comment
-		        insertComment(post.data,commentDiv.lastChild,colorCode);
-		        colorCode=colorCode^1;//for alternating BG colors
-		    }
-	    )
+		//Insert first batch of comments
+	    insertComments(5,0,result[1].data.children,loadingText);
+	    //Add link to load more comments
+	    loadingText.innerText="Load more comments...";
+	    loadingText.style.color="blue";
+	    loadingText.className="5";
+	    $(loadingText).on("click",function(){
+	    	insertComments(5,(+this.className),result[1].data.children,this);
+	    	this.className=(+this.className)+5;
+	    });
 	})
 }
 
@@ -123,6 +123,21 @@ function insertComment(data,context,colorCode){
 
 	//insert the comment before the context
 	$(context).before(commentHTML);
+}
+
+function insertComments(numComments, offset, childrenList, context){
+	var colorCode; //code for bg color of comment
+
+	colorCode=1;//arbitrarily initialize as 1
+
+	//Loop running through all top replies
+	$.each(childrenList.slice(offset, offset+numComments),
+	    function (i, post) {
+	    	//insert comment
+	        insertComment(post.data,context,colorCode);
+	        colorCode=colorCode^1;//for alternating BG colors
+	    }
+    )
 }
 
 //Get everything going
