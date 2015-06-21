@@ -29,7 +29,7 @@ function insertExpandoButton(){
 		}
 	});
 	//Insert expando button into the page
-	$('.tagline').before(button);
+	$('.tagline:not(.added)').addClass("added").before(button);
 }
 
 /* Inserts the comment content into the html.
