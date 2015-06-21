@@ -43,6 +43,7 @@ function insertCommentDiv(theButton){
 	var commentHTML; //HTML for the comments to add
 	var loadingText;//HTML for loading text
 	var colorCode; //code for the bg color of the comment
+	var desiredAdd;
 	var childList; //list of comments
 	//Initialize the JSON URL
 	theURL = $(theButton).siblings(".flat-list").find(".comments").attr("href")+".json";
@@ -57,13 +58,17 @@ function insertCommentDiv(theButton){
 	$(commentDiv).append(loadingText);
 	//Set color code as 0 to start (arbitrary)
 	colorCode=1;
+
+	//Default, add 5 comments
+	desiredAdd=5
 	//Get comments and write to div
 	$.getJSON(theURL,function foo(result) {
 		childList=result[1].data.children;
 		$(loadingText).data("index",0);
 		$(loadingText).removeClass("loading").addClass("loadMore");
 	    $(loadingText).on("click",function(){
-	    	loadReplies(this,result[1].data.children,5,colorCode);
+	    	loadReplies(this,result[1].data.children,desiredAdd,colorCode);
+	    	colorCode = (desiredAdd%2==0) ? colorCode : colorCode^1;
 	    });
 	    loadingText.click();
 	})
@@ -163,14 +168,6 @@ function loadReplies(context,childList,desiredLoad,colorCode){
 			$(context).hide();
 		}
 	}
-
-	//Hide button if necessary
-
-	//REMEMBER THIS DOESNT COVER BORDER CASE!!
-}
-
-function insertReplyLink(){
-
 }
 
 //Get everything going
