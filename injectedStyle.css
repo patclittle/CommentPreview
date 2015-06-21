@@ -48,3 +48,10 @@
 	.loadReplies::after{
 		content: "Load replies...";
 	}
+
+.commentExpander{
+	display:inline;
+	float:left;
+	margin-right: 1%;
+	margin-top: 1px;
+}

@@ -43,7 +43,7 @@ function insertCommentDiv(theButton){
 	var commentHTML; //HTML for the comments to add
 	var loadingText;//HTML for loading text
 	var colorCode; //code for the bg color of the comment
-	var desiredAdd;
+	var desiredAdd; // desired amount of comments to add
 	var childList; //list of comments
 	//Initialize the JSON URL
 	theURL = $(theButton).siblings(".flat-list").find(".comments").attr("href")+".json";
