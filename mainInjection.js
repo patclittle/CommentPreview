@@ -43,6 +43,9 @@ function insertCommentDiv(theButton){
 	var commentHTML; //HTML for the comments to add
 	var loadingText;//HTML for loading text
 	var colorCode; //code for the bg color of the comment
+	var index; //keeps track of index of comment
+	var numToShow; //the number of comments to show
+	var childList; //list of comments
 	//Initialize the JSON URL
 	theURL = $(theButton).siblings(".flat-list").find(".comments").attr("href")+".json";
 	//Build the container div
@@ -50,9 +53,7 @@ function insertCommentDiv(theButton){
 	$(commentDiv).addClass("commentContent");
 	//Add loading text to div while comments load
 	loadingText=document.createElement("a");
-	loadingText.style.color="red";
-	loadingText.style.fontSize="16px";
-	loadingText.innerText="Loading comments...";
+	$(loadingText).addClass("bottomText loading");
 	//Add the div to the page
 	$(theButton).siblings(".flat-list").after(commentDiv);
 	$(commentDiv).append(loadingText);
@@ -60,15 +61,24 @@ function insertCommentDiv(theButton){
 	colorCode=1;
 	//Get comments and write to div
 	$.getJSON(theURL,function foo(result) {
+		childList=result[1].data.children;
 		//Insert first batch of comments
-	    insertComments(5,0,result[1].data.children,loadingText);
+		numToShow = (childList.length<5) ? childList.length:5;
+	    insertComments(numToShow,0,childList,loadingText);
 	    //Add link to load more comments
-	    loadingText.innerText="Load more comments...";
-	    loadingText.style.color="blue";
-	    loadingText.className="5";
+	    $(loadingText).removeClass("loading").addClass("loadMore");
+	    $(loadingText).data("index",5);
 	    $(loadingText).on("click",function(){
-	    	insertComments(5,(+this.className),result[1].data.children,this);
-	    	this.className=(+this.className)+5;
+	    	index = $(this).data("index");
+	    	console.log(index,childList.length);
+	    	numToShow = (childList.length<index+5) ? childList.length-index:5;
+	    	console.log(numToShow);
+	    	insertComments(numToShow,index,childList,this);
+	    	if (numToShow==5) {
+	    		$(this).data("index",index+5);
+	    	}else{
+	    		$(this).hide();
+	    	}
 	    });
 	})
 }

@@ -14,3 +14,24 @@
 	font-size: 10px !important;
 	color: black !important;
 }
+.bottomText{
+	margin-left: 5px;
+}
+.loading{
+	color:red;
+	font-size: 16px;
+}
+	.loading::after{
+		content: "Loading comments...";
+	}
+.loadMore{
+	color:blue;
+	font-size: 12px;
+	cursor: pointer;
+}
+	.loadMore::after{
+		content: "Load more comments...";
+	}
+.commentContent{
+	padding-bottom: 5px;
+}
