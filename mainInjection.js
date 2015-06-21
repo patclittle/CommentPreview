@@ -97,7 +97,7 @@ function insertComment(data,context,colorCode){
 		if(data.replies.data.children[0].kind!="more"){ //Check if the reply is already loaded
 			//Create button to load a reply
 			repliesLink=document.createElement('a');
-			repliesLink.className="loadMore";
+			repliesLink.className="loadReplies";
 			$(repliesLink).data("index",0);
 
 			//Add functionality to button

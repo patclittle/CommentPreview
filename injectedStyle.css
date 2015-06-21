@@ -1,4 +1,5 @@
-.commentA{
+/*Comment styles (one for each BG color)*/
+.commentA{ 
 	background-color: #EFF7FF;
 	padding:5px;
 	border: 1px solid #7A7A7A;
@@ -14,17 +15,19 @@
 	font-size: 10px !important;
 	color: black !important;
 }
+
+/*For the loading text*/
 .bottomText{
 	margin-left: 5px;
 }
-.loading{
+.loading{ /*While loading */
 	color:red;
 	font-size: 16px;
 }
 	.loading::after{
 		content: "Loading comments...";
 	}
-.loadMore{
+.loadMore{ /* Once finished loading */
 	color:blue;
 	font-size: 12px;
 	cursor: pointer;
@@ -32,6 +35,16 @@
 	.loadMore::after{
 		content: "Load more comments...";
 	}
+
+/*The div with the comments in them */
 .commentContent{
 	padding-bottom: 5px;
 }
+
+/*For the button to load replies */
+.loadReplies{
+	cursor:pointer;
+}
+	.loadReplies::after{
+		content: "Load replies...";
+	}
