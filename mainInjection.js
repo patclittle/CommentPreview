@@ -43,8 +43,6 @@ function insertCommentDiv(theButton){
 	var commentHTML; //HTML for the comments to add
 	var loadingText;//HTML for loading text
 	var colorCode; //code for the bg color of the comment
-	var index; //keeps track of index of comment
-	var numToShow; //the number of comments to show
 	var childList; //list of comments
 	//Initialize the JSON URL
 	theURL = $(theButton).siblings(".flat-list").find(".comments").attr("href")+".json";
@@ -62,24 +60,12 @@ function insertCommentDiv(theButton){
 	//Get comments and write to div
 	$.getJSON(theURL,function foo(result) {
 		childList=result[1].data.children;
-		//Insert first batch of comments
-		numToShow = (childList.length<5) ? childList.length:5;
-	    insertComments(numToShow,0,childList,loadingText);
-	    //Add link to load more comments
-	    $(loadingText).removeClass("loading").addClass("loadMore");
-	    $(loadingText).data("index",5);
+		$(loadingText).data("index",0);
+		$(loadingText).removeClass("loading").addClass("loadMore");
 	    $(loadingText).on("click",function(){
-	    	index = $(this).data("index");
-	    	console.log(index,childList.length);
-	    	numToShow = (childList.length<index+5) ? childList.length-index:5;
-	    	console.log(numToShow);
-	    	insertComments(numToShow,index,childList,this);
-	    	if (numToShow==5) {
-	    		$(this).data("index",index+5);
-	    	}else{
-	    		$(this).hide();
-	    	}
+	    	loadReplies(this,result[1].data.children,5,colorCode);
 	    });
+	    loadingText.click();
 	})
 }
 
@@ -111,19 +97,12 @@ function insertComment(data,context,colorCode){
 		if(data.replies.data.children[0].kind!="more"){ //Check if the reply is already loaded
 			//Create button to load a reply
 			repliesLink=document.createElement('a');
-			repliesLink.innerText="Load more comments...";
-			repliesLink.className="0";
+			repliesLink.className="loadMore";
+			$(repliesLink).data("index",0);
 
 			//Add functionality to button
 			$(repliesLink).on("click",function(){
-				insertComment(data.replies.data.children[this.className].data,repliesLink,colorCode^1);
-				//keep track of which number reply we are at with class name
-				replyNum = (+this.className)+1;
-				if(replyNum<data.replies.data.children.length && data.replies.data.children[replyNum].kind!="more"){ //if there are more replies to load
-					this.className = replyNum; // get ready to load next reply
-				}else{
-					$(this).hide(); // otherwise hide the button
-				}
+				loadReply(this,data.replies.data.children,colorCode);
 			});
 
 			//Add button to the comment
@@ -135,19 +114,63 @@ function insertComment(data,context,colorCode){
 	$(context).before(commentHTML);
 }
 
-function insertComments(numComments, offset, childrenList, context){
-	var colorCode; //code for bg color of comment
+/*
+ * Loads and inserts a reply, and sets up the reply link
+ * to load more comments if necessary
+ * @param context is the reply link to load for
+ * @param childList is the list of replies/comments
+ * @colorcode is 1 or 0 for bg color of the div
+ */
+function loadReply(context,childList,colorCode){
+	var index;//the index of the reply
 
-	colorCode=1;//arbitrarily initialize as 1
+	index = $(context).data("index");//fetch index
+	//Insert the comment
+	insertComment(childList[index].data,context,colorCode^1)
 
-	//Loop running through all top replies
-	$.each(childrenList.slice(offset, offset+numComments),
-	    function (i, post) {
-	    	//insert comment
-	        insertComment(post.data,context,colorCode);
-	        colorCode=colorCode^1;//for alternating BG colors
-	    }
-    )
+	//Check if there are more comments to load, update 
+	//index if necessary
+	index++;
+	if (index<childList.length && childList[index].kind!="more") {
+		$(context).data("index",index);
+	}else{
+		$(context).hide();
+	}
+}
+
+/*
+ * Loads multiple replies (using the loadReply function)
+ * @param context is the reply link to load for
+ * @param childList is the list of replies/comments
+ * @param desiredLoad is the desired amount of comments to load
+ * @param colorCode is 1 or 0 for the bg color of the div
+ */
+function loadReplies(context,childList,desiredLoad,colorCode){
+	var index; //index of the reply
+	var actualLoad; //the actual amount of comments to load
+
+	index = $(context).data("index");//fetch index
+
+	//Calculate how many replies can actually be loaded
+	actualLoad = (index+desiredLoad <= childList.length) ? desiredLoad : childList.length-index;
+
+	//Load up the replies
+	for(i=index;i<index+actualLoad;i++){
+		if(childList[i].kind!="more"){
+			loadReply(context,childList,colorCode);
+			colorCode=colorCode^1;
+		}else{
+			$(context).hide();
+		}
+	}
+
+	//Hide button if necessary
+
+	//REMEMBER THIS DOESNT COVER BORDER CASE!!
+}
+
+function insertReplyLink(){
+
 }
 
 //Get everything going
