@@ -58,4 +58,5 @@
 }
 	.commentExpander:hover{
 		background-color: #EBF8FF;
+		border-radius: 5px;
 	}
