@@ -13,10 +13,7 @@
 
 	],
 	"web_accessible_resources": [
-		"/mainInjection/Images/plusIcon.png",
-		"/mainInjection/Images/minusIcon.png",
-		"/mainInjection/Images/plusIconLight.png",
-		"/mainInjection/Images/minusIconLight.png"
+		"mainInjection/Images/*"
 	],
 	"background":{
 		"scripts": ["background.js"],
