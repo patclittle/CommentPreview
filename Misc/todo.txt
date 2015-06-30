@@ -1,0 +1,2 @@
+Instead of having insertComments, have a loadRepliesLink that will put a link to load x replies from a given list starting at an offset -- use throughout code for cleanliness and better conceptually oriented code
+Make the icon only load once

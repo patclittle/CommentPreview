@@ -1,2 +1,0 @@
-CLEAN UP INSERT REPLY FUNCTION
- -- really map it out in head and write it better

@@ -9,7 +9,7 @@ function insertExpandoButton(){
 	var button = document.createElement("img");
 	//Add class for keeping track of expanding
 	$(button).addClass("commentExpander unexpanded");
-	button.src = chrome.extension.getURL('mainInjection/Images/plusIconLight.png'); 
+	button.src = chrome.extension.getURL('plusIconLight.png'); 
 	//Add expanding functionality to button
 	$(button).on("click",function(){
 		if (this.className.includes("unexpanded")){ // expand the comments
@@ -19,12 +19,12 @@ function insertExpandoButton(){
 				insertCommentDiv($(this)); // open and show comments
 			}
 			//Change around the button to be a collapse
-			this.src = chrome.extension.getURL('mainInjection/Images/minusIconLight.png'); 
+			this.src = chrome.extension.getURL('minusIconLight.png'); 
 			this.className = "commentExpander opened";
 		}else{ // unexpand comments
 			$(this).siblings(".commentContent").hide();
 			//Change button to be an expand
-			this.src = chrome.extension.getURL('mainInjection/Images/plusIconLight.png'); 
+			this.src = chrome.extension.getURL('plusIconLight.png'); 
 			this.className = "commentExpander opened unexpanded";
 		}
 	});
