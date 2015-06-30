@@ -13,17 +13,17 @@
 
 	],
 	"web_accessible_resources": [
-		"/plusIcon.png",
-		"/minusIcon.png",
-		"/plusIconLight.png",
-		"/minusIconLight.png"
+		"/mainInjection/Images/plusIcon.png",
+		"/mainInjection/Images/minusIcon.png",
+		"/mainInjection/Images/plusIconLight.png",
+		"/mainInjection/Images/minusIconLight.png"
 	],
 	"background":{
 		"scripts": ["background.js"],
 		"persistent": false
 	},
 	"browser_action":{
-    	"default_icon": "settingsIcon.png",
-    	"default_popup": "settings.html"
+    	"default_icon": "Settings/Images/settingsIcon.png",
+    	"default_popup": "Settings/HTML/settings.html"
     }
 }
